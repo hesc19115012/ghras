@@ -90,26 +90,17 @@ function sendToForm(position) {
   var lat = position.coords.latitude;
   var lon = position.coords.longitude;
 
-  var locationData = lat + "," + lon;
+  // ✅ Create Google Maps link
+  var mapsLink = "https://maps.google.com/?q=" + lat + "," + lon;
 
-  var formURL = "https://docs.google.com/forms/d/e/1FAIpQLSeuSbHfaQh2riG8V7AfnR_67b1hun3_FG9npgtqOXVdOyZwBw/formResponse";
-  var entryID = "entry.1346477846";
+  // ✅ Your prefilled form link
+  var prefilledURL = "https://docs.google.com/forms/d/e/1FAIpQLSeuSbHfaQh2riG8V7AfnR_67b1hun3_FG9npgtqOXVdOyZwBw/viewform?usp=pp_url&entry.1346477846=TEST";
 
-  var submitURL = formURL + "?" + entryID + "=" + encodeURIComponent(locationData);
+  // 🔁 Replace TEST with encoded maps link
+  var finalURL = prefilledURL.replace("TEST", encodeURIComponent(mapsLink));
 
-  // Submit in hidden iframe (no page change)
-  var iframe = document.createElement("iframe");
-  iframe.style.display = "none";
-  iframe.src = submitURL;
-  document.body.appendChild(iframe);
-
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("status").innerHTML = "✅ Location submitted!";
-
-  // Redirect back after 1.5 sec
-  setTimeout(function() {
-    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSeuSbHfaQh2riG8V7AfnR_67b1hun3_FG9npgtqOXVdOyZwBw/viewform";
-  }, 1500);
+  // 🚀 Redirect to Google Form with filled data
+  window.location.href = finalURL;
 }
 
 function showError(error) {
