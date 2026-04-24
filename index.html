@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Share Your Location</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    text-align: center;
+    width: 320px;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #666;
+    font-size: 14px;
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    background: #4facfe;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background: #007bff;
+  }
+
+  .status {
+    margin-top: 15px;
+    font-size: 13px;
+    color: green;
+  }
+
+  .loader {
+    display: none;
+    margin-top: 10px;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="card">
+  <h2>📍 Share Location</h2>
+  <p>Click below to securely share your location.</p>
+
+  <button onclick="getLocation()">Capture Location</button>
+
+  <div class="loader" id="loader">⏳ Getting location...</div>
+  <div class="status" id="status"></div>
+</div>
+
+<script>
+function getLocation() {
+  document.getElementById("loader").style.display = "block";
+  document.getElementById("status").innerHTML = "";
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(sendToForm, showError);
+  } else {
+    alert("Geolocation not supported");
+  }
+}
+
+function sendToForm(position) {
+  var lat = position.coords.latitude;
+  var lon = position.coords.longitude;
+
+  var locationData = lat + "," + lon;
+
+  // 🔴 Replace with your Google Form details
+  var formURL = "https://docs.google.com/forms/d/e/1FAIpQLSeuSbHfaQh2riG8V7AfnR_67b1hun3_FG9npgtqOXVdOyZwBw/formResponse";
+  var entryID = "entry.1346477846";
+
+  var fullURL = formURL + "?" + entryID + "=" + encodeURIComponent(locationData);
+
+  fetch(fullURL, { method: "POST", mode: "no-cors" });
+
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("status").innerHTML = "✅ Location submitted successfully!";
+
+  // ⏳ Redirect back after 2 seconds
+  setTimeout(function() {
+    window.location.href = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform";
+  }, 2000);
+}
+
+function showError(error) {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("status").style.color = "red";
+  document.getElementById("status").innerHTML = "❌ Permission denied or failed!";
+}
+</script>
+
+</body>
+</html>
