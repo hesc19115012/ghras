@@ -95,10 +95,21 @@ function sendToForm(position) {
   var formURL = "https://docs.google.com/forms/d/e/1FAIpQLSeuSbHfaQh2riG8V7AfnR_67b1hun3_FG9npgtqOXVdOyZwBw/formResponse";
   var entryID = "entry.1346477846";
 
-  var fullURL = formURL + "?" + entryID + "=" + encodeURIComponent(locationData);
+  var submitURL = formURL + "?" + entryID + "=" + encodeURIComponent(locationData);
 
-  // ✅ BEST METHOD → Redirect submission
-  window.location.href = fullURL;
+  // Submit in hidden iframe (no page change)
+  var iframe = document.createElement("iframe");
+  iframe.style.display = "none";
+  iframe.src = submitURL;
+  document.body.appendChild(iframe);
+
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("status").innerHTML = "✅ Location submitted!";
+
+  // Redirect back after 1.5 sec
+  setTimeout(function() {
+    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSeuSbHfaQh2riG8V7AfnR_67b1hun3_FG9npgtqOXVdOyZwBw/viewform";
+  }, 1500);
 }
 
 function showError(error) {
