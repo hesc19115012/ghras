@@ -92,21 +92,13 @@ function sendToForm(position) {
 
   var locationData = lat + "," + lon;
 
-  // 🔴 Replace with your Google Form details
   var formURL = "https://docs.google.com/forms/d/e/1FAIpQLSeuSbHfaQh2riG8V7AfnR_67b1hun3_FG9npgtqOXVdOyZwBw/formResponse";
   var entryID = "entry.1346477846";
 
   var fullURL = formURL + "?" + entryID + "=" + encodeURIComponent(locationData);
 
-  fetch(fullURL, { method: "POST", mode: "no-cors" });
-
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("status").innerHTML = "✅ Location submitted successfully!";
-
-  // ⏳ Redirect back after 2 seconds
-  setTimeout(function() {
-    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSeuSbHfaQh2riG8V7AfnR_67b1hun3_FG9npgtqOXVdOyZwBw/viewform";
-  }, 2000);
+  // ✅ BEST METHOD → Redirect submission
+  window.location.href = fullURL;
 }
 
 function showError(error) {
